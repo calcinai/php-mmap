@@ -77,7 +77,6 @@ class StreamWrapper {
      * @param $data
      */
     private function subprocess_write($command, $data = ''){
-        var_dump($command.$data);
         fwrite($this->pipes[0], $command.$data);
     }
 
