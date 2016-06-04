@@ -1,2 +1,2 @@
 # low-level
-A collection low-level functions for PHP
+A collection of low-level functions for PHP
