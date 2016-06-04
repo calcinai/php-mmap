@@ -1,0 +1,20 @@
+{
+    "name": "calcinai/php-mmap",
+    "description": "mmap for PHP",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Michael Calcinai",
+            "email": "michael@calcin.ai"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Calcinai\\MMap\\": "lib/MMap"
+        },
+        "files": ["lib/registration.php"]
+    }
+}
