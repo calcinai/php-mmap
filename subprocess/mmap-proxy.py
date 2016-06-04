@@ -24,6 +24,6 @@ while True:
         length = struct.unpack('<L', sys.stdin.read(4))[0];
         mem.write(sys.stdin.read(length))
     elif(command == 'e'):
-        mem.flush()
+        #mem.flush() - not working everywhere
         mem.close()
         exit(0)
