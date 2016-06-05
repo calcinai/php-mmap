@@ -11,19 +11,25 @@ fd = os.open(filename, os.O_RDWR | os.O_SYNC)
 mem = mmap.mmap(fd, block_size, offset=offset)
 os.close(fd)
 
-while True:
-    command = sys.stdin.read(1)
+try:
+    while True:
+        command = sys.stdin.read(1)
 
-    if(command == 's'):
-        address = struct.unpack('<L', sys.stdin.read(4))[0];
-        mem.seek(address)
-    elif(command == 'r'):
-        length = struct.unpack('<L', sys.stdin.read(4))[0];
-        sys.stdout.write(mem.read(length))
-    elif(command == 'w'):
-        length = struct.unpack('<L', sys.stdin.read(4))[0];
-        mem.write(sys.stdin.read(length))
-    elif(command == 'e'):
-        #mem.flush() - not working everywhere
-        mem.close()
-        exit(0)
+        if(command == 's'):
+            address = struct.unpack('<H', sys.stdin.read(2))[0];
+            mem.seek(address)
+            #sys.stdout.write(struct.pack('<H', mem.tell())) #To tell position, read seems to be very slow from php so to revisit.
+        elif(command == 'r'):
+            length = struct.unpack('<H', sys.stdin.read(2))[0];
+            sys.stdout.write(mem.read(length))
+        elif(command == 'w'):
+            length = struct.unpack('<H', sys.stdin.read(2))[0];
+            mem.write(sys.stdin.read(length))
+        elif(command == 'e'):
+            #mem.flush() #- not working everywhere
+            mem.close()
+            exit(0)
+
+except KeyboardInterrupt:
+    mem.close()
+    exit();

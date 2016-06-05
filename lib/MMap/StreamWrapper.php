@@ -34,6 +34,7 @@ class StreamWrapper {
 
 
         $this->process = proc_open($subprocess_cmd, $descriptorspec, $this->pipes);
+        $this->position = 0;
 
         if($this->process === false){
             throw new \Exception('Could not spawn child process');
@@ -52,19 +53,20 @@ class StreamWrapper {
 
     public function stream_seek($address, $whence = SEEK_SET){
         //TODO send whence
-        $this->subprocess_write(self::COMMAND_SEEK, pack('V', $address));
+        //This is an assumption that the stream will always seek where its sold - can get some info back if this fails.
+        $this->subprocess_write(self::COMMAND_SEEK, pack('v', $address));
     }
 
     public function stream_read($length){
 
-        $this->subprocess_write(self::COMMAND_READ, pack('V', $length));
-        return fread($this->pipes[1], $length);
+        $this->subprocess_write(self::COMMAND_READ, pack('v', $length));
+        return $this->subprocess_read($length);
     }
 
     public function stream_write($data){
 
         $length = strlen($data);
-        $this->subprocess_write(self::COMMAND_WRITE, pack('V', $length).$data);
+        $this->subprocess_write(self::COMMAND_WRITE, pack('v', $length).$data);
     }
 
     public function stream_eof(){
@@ -78,6 +80,14 @@ class StreamWrapper {
      */
     private function subprocess_write($command, $data = ''){
         fwrite($this->pipes[0], $command.$data);
+    }
+
+    /**
+     * @param $length
+     * @return string
+     */
+    private function subprocess_read($length){
+        return fread($this->pipes[1], $length);
     }
 
 
