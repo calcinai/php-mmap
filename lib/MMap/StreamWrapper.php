@@ -34,7 +34,6 @@ class StreamWrapper {
 
 
         $this->process = proc_open($subprocess_cmd, $descriptorspec, $this->pipes);
-        $this->position = 0;
 
         if($this->process === false){
             throw new \Exception('Could not spawn child process');
