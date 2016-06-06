@@ -134,7 +134,8 @@ class StreamWrapper {
      * @return string
      */
     private function subprocess_read($length){
-        return fread($this->pipes[1], $length);
+        $data = fread($this->pipes[1], $length);
+        return $data;
     }
 
 
