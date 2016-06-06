@@ -11,11 +11,21 @@ class StreamWrapper {
     private $process;
     private $pipes;
 
+    private $size;
+    private $position;
+
     const COMMAND_SEEK  = 's';
+    const COMMAND_TELL  = 't';
     const COMMAND_READ  = 'r';
     const COMMAND_WRITE = 'w';
     const COMMAND_EXIT  = 'e';
 
+    /**
+     * @param $path
+     * @param $mode
+     * @return bool
+     * @throws \Exception
+     */
     public function stream_open($path, $mode){
 
         //Yuck.
@@ -34,6 +44,8 @@ class StreamWrapper {
 
 
         $this->process = proc_open($subprocess_cmd, $descriptorspec, $this->pipes);
+        $this->size = $components['block_size'];
+        $this->position = 0;
 
         if($this->process === false){
             throw new \Exception('Could not spawn child process');
@@ -42,6 +54,9 @@ class StreamWrapper {
         return true;
     }
 
+    /**
+     *
+     */
     public function stream_close(){
 
         if(is_resource($this->process)){
@@ -50,26 +65,59 @@ class StreamWrapper {
         }
     }
 
+    /**
+     * TODO send whence
+     *
+     * @param $address
+     * @param int $whence
+     * @return bool
+     */
     public function stream_seek($address, $whence = SEEK_SET){
-        //TODO send whence
-        //This is an assumption that the stream will always seek where its sold - can get some info back if this fails.
         $this->subprocess_write(self::COMMAND_SEEK, pack('v', $address));
+
+        //This is an assumption that the stream will always seek where its sold - can get some info back if this fails.
+        $this->position = $address;
+        return true;
     }
 
-    public function stream_read($length){
+    /**
+     * @return mixed
+     */
+    public function stream_tell(){
+        return $this->position;
+    }
 
+    /**
+     * @param $length
+     * @return string
+     */
+    public function stream_read($length){
         $this->subprocess_write(self::COMMAND_READ, pack('v', $length));
+
+        //Assume success
+        $this->position += $length;
         return $this->subprocess_read($length);
     }
 
+    /**
+     * @param $data
+     * @return int
+     */
     public function stream_write($data){
 
         $length = strlen($data);
         $this->subprocess_write(self::COMMAND_WRITE, pack('v', $length).$data);
+
+        //Assume success for now
+        $this->position += $length;
+        return $length;
     }
 
+    /**
+     * @return mixed
+     */
     public function stream_eof(){
-        return true;
+        return $this->position >= $this->size;
     }
 
 

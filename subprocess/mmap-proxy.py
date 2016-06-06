@@ -18,10 +18,11 @@ try:
         if(command == 's'):
             address = struct.unpack('<H', sys.stdin.read(2))[0];
             mem.seek(address)
-            #sys.stdout.write(struct.pack('<H', mem.tell())) #To tell position, read seems to be very slow from php so to revisit.
         elif(command == 'r'):
             length = struct.unpack('<H', sys.stdin.read(2))[0];
-            sys.stdout.write(mem.read(length))
+            sys.stdout.write(mem.read(length)) #issue with consistency
+        elif(command == 't'):
+            sys.stdout.write(struct.pack('<H', mem.tell()))
         elif(command == 'w'):
             length = struct.unpack('<H', sys.stdin.read(2))[0];
             mem.write(sys.stdin.read(length))
