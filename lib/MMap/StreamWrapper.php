@@ -28,17 +28,18 @@ class StreamWrapper {
      */
     public function stream_open($path, $mode){
 
-        $test = @fopen($path, $mode);
-        if($test === false){
-            throw new \Exception(sprintf('Could not open [%s]', $path));
-        }
-        fclose($test);
-
         //Yuck.
         $subprocess_path = __DIR__ .'/../../subprocess/mmap-proxy.py';
 
         $components = self::parseURI($path);
         $offset = isset($components['options']['offset']) ? $components['options']['offset'] : 0;
+
+        //Test it can be opened in the correct mode before passing to child
+        $test = @fopen($components['file_name'], $mode);
+        if($test === false){
+            throw new \Exception(sprintf('Could not open [%s]', $components['file_name']));
+        }
+        fclose($test);
 
         $subprocess_cmd = sprintf('python -u %s %s %d %d', $subprocess_path, $components['file_name'], $components['block_size'], $offset);
 
