@@ -5,7 +5,8 @@
  */
 
 //Kindof a backward way go get it as a resource.
-stream_register_wrapper('mmap', \Calcinai\MMap\StreamWrapper::class);
+stream_register_wrapper('mmap', '\\Calcinai\\MMap\\StreamWrapper');
+//stream_register_wrapper('mmap', \Calcinai\MMap\StreamWrapper::class); //Only thing here that requires php5.5
 
 function mmap_open($file_name, $block_size, $offset = 0){
     //TODO - finish these
