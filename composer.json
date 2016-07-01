@@ -12,6 +12,9 @@
     "require": {
         "php": ">=5.4.0"
     },
+    "suggest": {
+        "ext-mmap": "Much faster"
+    },
     "autoload": {
         "psr-4": {
             "Calcinai\\MMap\\": "lib/MMap"
