@@ -13,7 +13,7 @@
         "php": ">=5.4.0"
     },
     "suggest": {
-        "ext-mmap": "Much faster"
+        "ext-mmap": "Much more efficient native extension"
     },
     "autoload": {
         "psr-4": {
