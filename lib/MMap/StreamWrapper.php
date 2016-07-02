@@ -24,7 +24,6 @@ class StreamWrapper {
      * @param $path
      * @param $mode
      * @return bool
-     * @throws \Exception
      */
     public function stream_open($path, $mode){
 
@@ -37,7 +36,7 @@ class StreamWrapper {
         //Test it can be opened in the correct mode before passing to child
         $test = @fopen($components['file_name'], $mode);
         if($test === false){
-            throw new \Exception(sprintf('Could not open [%s]', $components['file_name']));
+            return false;
         }
         fclose($test);
 
@@ -54,11 +53,7 @@ class StreamWrapper {
         $this->size = $components['block_size'];
         $this->position = 0;
 
-        if($this->process === false){
-            throw new \Exception('Could not spawn child process');
-        }
-
-        return true;
+        return is_resource($this->process);
     }
 
     /**
