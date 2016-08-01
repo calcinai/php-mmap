@@ -5,9 +5,11 @@
  */
 
 
+use Calcinai\MMap\StreamWrapper;
+
 if(!function_exists('mmap_open')){
-    //stream_register_wrapper('mmap', \Calcinai\MMap\StreamWrapper::class); //Only thing here that requires php5.5
-    stream_register_wrapper('mmap', '\\Calcinai\\MMap\\StreamWrapper');
+
+    StreamWrapper::register();
 
     //Kindof a backward way go get it as a resource.
     function mmap_open($file_name, $block_size, $offset = 0){

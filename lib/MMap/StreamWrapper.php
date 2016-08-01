@@ -176,4 +176,8 @@ class StreamWrapper {
     public function __destruct() {
         $this->stream_close();
     }
+
+    public static function register(){
+        stream_register_wrapper('mmap', __CLASS__);
+    }
 }
