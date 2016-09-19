@@ -7,7 +7,7 @@ you're reading large amounts of data it can be done piece by piece.
 
 I have tried to make it functionally equivalent to c's implementation, but it's not quite complete due to some limitations.
 
-It would be nice for this to develop into a native php extension that can be phpize'd as a post install if the environment supports it.
+I have also written [a compatible extension](https://github.com/calcinai/php-ext-mmap) that you can compile and install as a faster drop-in replacement
 
 ## Setup
 
